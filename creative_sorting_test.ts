@@ -1,6 +1,6 @@
-Feature('Creative filtering ');
+Feature('Creative sorting ');
 
-
+import assert from 'assert';
 
 Scenario('grab creativeVariants from network', async ({ I }) => {
     I.amOnPage('https://martin-kregar.celtra.com/explorer/1df8d540');
@@ -37,14 +37,43 @@ Scenario('grab creativeVariants from network', async ({ I }) => {
 
     //console.log(creativeIdsOnPage);
 
-    for (let i = 0; i < creativeIdsOnPage.length; i++) {
-        if (sortedCreatives[i].creativeId !== creativeIdsOnPage[i]) {
-        throw new Error(
-            `Mismatch at index ${i}: API=${sortedCreatives[i]}, UI=${creativeIdsOnPage[i]}`
-        );
-        }
+    const sortedCreativesIds = sortedCreatives.map(creative => creative.creativeId);
+
+    assert.strictEqual(
+        JSON.stringify(sortedCreativesIds), 
+        JSON.stringify(creativeIdsOnPage),
+        `Creative IDs don't match. API: ${sortedCreativesIds}, UI: ${creativeIdsOnPage}`
+    );
+
+    I.waitForElement('[data-id="selectbox-select-row"]', 5);
+
+    I.click('[data-id="selectbox-select-row"] .selectbox__select-row');
+
+    I.click(locate('p').withText('Larger to smaller'));
+
+    const sizeDivs = await I.grabTextFromAll(
+    '.creative-variant .creative-variant-metadata__properties__info__size-label'
+    );
+
+    //console.log(sizeDivs);
+
+    const surfaces = sizeDivs.map(text => {
+    const match = text.match(/(\d+)×(\d+)/);
+    if (match) {
+        const width = parseInt(match[1], 10);
+        const height = parseInt(match[2], 10);
+        return width * height;
     }
+    return null;
+    }).filter(val => val !== null);
 
-    
+    //console.log(surfaces);
 
+    const sortedDesc = [...surfaces].sort((a, b) => b - a);
+
+    assert.strictEqual(
+        JSON.stringify(surfaces), 
+        JSON.stringify(sortedDesc), 
+        'Surfaces should be sorted in descending order'
+    );
 });
