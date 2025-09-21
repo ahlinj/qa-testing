@@ -12,7 +12,6 @@ export const config: CodeceptJS.MainConfig = {
   helpers: {
     Playwright: {
       browser: 'chromium',
-      url: 'https://martin-kregar.celtra.com/',
       show: true
     }
   },
