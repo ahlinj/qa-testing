@@ -1,8 +1,8 @@
-Feature('Creative sorting ');
+Feature('Creative sorting');
 
 import assert from 'assert';
 
-Scenario('grab creativeVariants from network', async ({ I }) => {
+Scenario('Sorting by lastModified and Larger to smaller', async ({ I }) => {
     I.amOnPage('https://martin-kregar.celtra.com/explorer/1df8d540');
 
     const response = await I.waitForResponse((res: any) => {
@@ -22,7 +22,7 @@ Scenario('grab creativeVariants from network', async ({ I }) => {
 
     //console.log(sortedCreatives);
 
-    I.seeNumberOfVisibleElements('.creative-variant', 3);
+    I.seeNumberOfVisibleElements('.creative-variant', 5);
 
     const idDivs = await I.grabTextFromAll(
         locate('.creative-variant div').withText('ID:')

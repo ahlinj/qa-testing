@@ -1,4 +1,4 @@
-Feature('Creative filtering ');
+Feature('Creative filtering');
 
 Scenario('Format and size filters', ({ I }) => {
     I.amOnPage('https://martin-kregar.celtra.com/explorer/1df8d540');
