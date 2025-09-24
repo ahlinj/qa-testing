@@ -14,7 +14,6 @@ Scenario('Format and size filters', async ({ I }) => {
     I.click(locate('span').withText('Format'));
     I.waitForElement('.filter-component');
     I.click('Universal Banner');
-    I.waitForClickable('Apply');
     I.waitForElement('div.dialog-button__container--medium', 5);
     I.click(locate('div.dialog-button__container--medium').withChild(locate('div').withText('Apply')));
 
@@ -27,7 +26,6 @@ Scenario('Format and size filters', async ({ I }) => {
     I.click(locate('span').withText('Size'));
     I.waitForElement('.filter-component');
     I.click(locate('span').withText('320×50'));
-    I.waitForClickable('Apply');
     I.waitForElement('div.dialog-button__container--medium', 5);
     I.click(locate('div.dialog-button__container--medium').withChild(locate('div').withText('Apply')));
 

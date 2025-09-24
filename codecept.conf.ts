@@ -11,12 +11,23 @@ export const config: CodeceptJS.MainConfig = {
   output: './output',
   helpers: {
     Playwright: {
+      url: 'https://martin-kregar.celtra.com',
+      show: false,
       browser: 'chromium',
-      show: true
     }
   },
   include: {
     I: './steps_file'
   },
+  multiple: {
+    parallel: {
+      browsers: [
+        { browser: 'chromium' },
+        { browser: 'firefox' },
+        { browser: 'webkit' }
+      ],
+      chunks: 3
+    }
+  },
   name: 'qa-testing'
-}
+};
