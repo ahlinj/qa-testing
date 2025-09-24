@@ -4,7 +4,7 @@ Feature('Creative data validation');
 
 Scenario('Text validation', async ({ I }) => {
     I.amOnPage('https://martin-kregar.celtra.com/explorer/1df8d540');
-
+    
     const bannerParent = locate('.creative-variant__creative-unit.creative-variant__child--border-radius')
                         .withText('Banner');
     I.waitForElement(bannerParent, 5);
