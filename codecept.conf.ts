@@ -29,5 +29,8 @@ export const config: CodeceptJS.MainConfig = {
       chunks: 3
     }
   },
-  name: 'qa-testing'
+  name: 'qa-testing',
+  plugins: {
+    retryFailedStep: { enabled: true, retries: 2 }
+  }
 };
