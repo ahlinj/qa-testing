@@ -3,6 +3,7 @@ Feature('Creative sorting');
 import assert from 'assert';
 
 Scenario('Sorting by lastModified and Larger to smaller', async ({ I }) => {
+    //1.
     I.amOnPage('https://martin-kregar.celtra.com/explorer/1df8d540');
 
     const response = await I.waitForResponse((res: any) => {
@@ -12,17 +13,22 @@ Scenario('Sorting by lastModified and Larger to smaller', async ({ I }) => {
     const data = await (response as any).json();
 
     const creatives = data.map((item: any) => ({
-    creativeId: item.creativeId,
-    dateModified: item.dateModified
+        creativeId: item.creativeId,
+        dateModified: item.dateModified
     }));
+
+    //2.
+    I.waitForElement('.selectbox__select-row--selected', 5);
+    I.see('Last modified creative', '.selectbox__select-row--selected p');
 
     //console.log(creatives);
 
+    //3.
     const sortedCreatives = creatives.sort((a, b) => b.dateModified - a.dateModified);
 
     //console.log(sortedCreatives);
 
-    I.seeNumberOfVisibleElements('.creative-variant', 5);
+    I.seeNumberOfVisibleElements('.creative-variant', 3);
 
     const idDivs = await I.grabTextFromAll(
         locate('.creative-variant div').withText('ID:')
@@ -45,12 +51,14 @@ Scenario('Sorting by lastModified and Larger to smaller', async ({ I }) => {
         `Creative IDs don't match. API: ${sortedCreativesIds}, UI: ${creativeIdsOnPage}`
     );
 
-    I.waitForElement('[data-id="selectbox-select-row"]', 5);
+    //4.
+    I.waitForElement('.selectbox__select-row', 5);
 
-    I.click('[data-id="selectbox-select-row"] .selectbox__select-row');
+    I.click('.selectbox__select-row');
 
     I.click(locate('p').withText('Larger to smaller'));
 
+    //5.
     const sizeDivs = await I.grabTextFromAll(
     '.creative-variant .creative-variant-metadata__properties__info__size-label'
     );
@@ -58,13 +66,13 @@ Scenario('Sorting by lastModified and Larger to smaller', async ({ I }) => {
     //console.log(sizeDivs);
 
     const surfaces = sizeDivs.map(text => {
-    const match = text.match(/(\d+)×(\d+)/);
-    if (match) {
-        const width = parseInt(match[1], 10);
-        const height = parseInt(match[2], 10);
-        return width * height;
-    }
-    return null;
+        const match = text.match(/(\d+)×(\d+)/);
+        if (match) {
+            const width = parseInt(match[1]);
+            const height = parseInt(match[2]);
+            return width * height;
+        }
+        return null;
     }).filter(val => val !== null);
 
     //console.log(surfaces);
